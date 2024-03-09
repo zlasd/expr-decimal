@@ -8,9 +8,8 @@ import (
 	decimalType "github.com/shopspring/decimal"
 )
 
-func GetExprOptions() []expr.Option {
+func GetOperatorOverloadingOptions() []expr.Option {
 	return []expr.Option{
-		expr.Env(ExprEnv{}),
 		expr.Operator("+", "DecimalAdd"),
 		expr.Operator("-", "DecimalSub"),
 		expr.Operator("*", "DecimalMul"),
@@ -36,6 +35,8 @@ func (e ExprEnv) Decimal(val any) decimalType.Decimal {
 		return decimalType.NewFromInt(refVal.Int())
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		return decimalType.NewFromInt(int64(refVal.Uint()))
+	case reflect.Float32, reflect.Float64:
+		return decimalType.NewFromFloat(refVal.Float())
 	case reflect.String:
 		return decimalType.RequireFromString(refVal.String())
 	default:
